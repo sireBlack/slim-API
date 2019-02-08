@@ -1,8 +1,12 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Tuupola\Middleware\CorsMiddleware;
 
 $app = new \Slim\App;
+
+$app->add(new Tuupola\Middleware\CorsMiddleware);
+
 
 //Get all customers
 
@@ -23,9 +27,7 @@ $app->get('/api/customers', function(Request $req, Response $res){
 
         $db = null;
 
-        return $response->withStatus(200)
-        ->withHeader('Content-Type', 'application/json')
-        ->write(json_encode($customers));
+        echo json_encode($customers);
 
     }catch(PDOException $e){
         echo '{"error": { "text": '.$e->getMessage().'}';
