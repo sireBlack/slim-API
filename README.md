@@ -1,4 +1,4 @@
-##SLIM-API
+## SLIM-API
 
 A simple API written in SLIP PHP
 
