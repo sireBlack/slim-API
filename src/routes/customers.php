@@ -5,7 +5,19 @@ use Tuupola\Middleware\CorsMiddleware;
 
 $app = new \Slim\App;
 
-$app->add(new Tuupola\Middleware\CorsMiddleware);
+// $app->add(new Tuupola\Middleware\CorsMiddleware);
+
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($req, $res, $next) {
+    $response = $next($req, $res);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 
 //Get all customers
@@ -27,7 +39,7 @@ $app->get('/api/customers', function(Request $req, Response $res){
 
         $db = null;
 
-        echo json_encode($customers);
+        return  json_encode($customers);
 
     }catch(PDOException $e){
         echo '{"error": { "text": '.$e->getMessage().'}';
